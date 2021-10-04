@@ -8,10 +8,20 @@ class Tabbar: UITabBar {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(deviceOrientationDidChangeNotification),
+                                               name: UIDevice.orientationDidChangeNotification,
+                                               object: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.isTranslucent = true
+        self.layer.cornerRadius = 20
     }
     
     override func draw(_ rect: CGRect) {
@@ -66,10 +76,7 @@ class Tabbar: UITabBar {
         return bezierPath.cgPath
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.isTranslucent = true
-        self.layer.cornerRadius = 20
+    @objc func deviceOrientationDidChangeNotification() {
+        setNeedsDisplay()
     }
-    
 }
